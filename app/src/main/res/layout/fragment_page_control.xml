@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pageControlLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PageControlFragment">
+
+    <EditText
+        android:id="@+id/inputView"
+        android:layout_width="275dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:autofillHints="@android:string/copyUrl"
+        android:ems="10"
+        android:labelFor="@id/inputView"
+        android:inputType="textPersonName" />
+
+    <ImageButton
+        android:id="@+id/goButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@android:drawable/ic_media_play"
+        android:contentDescription="@string/go_to_the_url" />
+
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@android:drawable/ic_media_previous"
+        android:contentDescription="@string/go_back_to_the_page" />
+
+    <ImageButton
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@android:drawable/ic_media_next"
+        android:contentDescription="@string/go_to_next_page" />
+
+</LinearLayout>
