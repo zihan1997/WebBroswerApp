@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/browserLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".BrowserActivity">
+
+    <FrameLayout
+        android:id="@+id/browser_control"
+        android:layout_width="411dp"
+        android:layout_height="50dp">
+
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/page_control"
@@ -22,7 +28,7 @@
     <FrameLayout
         android:id="@+id/page_viwer"
         android:layout_width="match_parent"
-        android:layout_height="678dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="1dp">
 
     </FrameLayout>
