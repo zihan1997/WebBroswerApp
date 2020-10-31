@@ -1,17 +1,22 @@
 package temple.edu.webbroswerapp;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.WebViewClient;
 
 public class BrowserActivity extends AppCompatActivity
-        implements PageControlFragment.ChooseInterface{
+        implements PageControlFragment.ChooseInterface,
+        PageViewerFragment.PageViewerInterface,
+        BrowserControlFragment.AddNewPageInterface {
 
     PageControlFragment pageControlFragment;
     PageViewerFragment pageViewerFragment;
+    BrowserControlFragment browserControlFragment;
+    PageListFragment pageListFragment;
+    PagerFragment pagerFragment;
 
 
     @Override
@@ -19,34 +24,64 @@ public class BrowserActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
 
+
+        // If fragments already added
+        final FragmentManager fm = getSupportFragmentManager();
+        Fragment tempFragment;
+
+        if((tempFragment = fm.findFragmentById(R.id.page_control)) instanceof  PageControlFragment){
+            pageControlFragment = (PageControlFragment)tempFragment;
+        }else{
+            fm.beginTransaction()
+                    .add(R.id.page_control, PageControlFragment.newInstance())
+                    .commit();
+
+        }
+
+        if((tempFragment = fm.findFragmentById(R.id.page_viwer)) instanceof PageViewerFragment){
+            pageViewerFragment = (PageViewerFragment)tempFragment;
+        }else {
+            fm.beginTransaction()
+                    .add(R.id.page_viwer, PageViewerFragment.newInstance())
+                    .commit();
+        }
+
         // Set newInstance
-        pageControlFragment = PageControlFragment.newInstance();
-        pageViewerFragment = PageViewerFragment.newInstance();
+        pageListFragment = PageListFragment.newInstance();
+        pagerFragment = PagerFragment.newInstance();
+
+
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.page_control, pageControlFragment)
                 .add(R.id.page_viwer, pageViewerFragment)
+                .add(R.id.browser_control, browserControlFragment)
                 .commit();
     }
 
     @Override
     public void chooseDirection(View view) {
-        String url = "";
         switch (view.getId()){
             case R.id.goButton:// Go feature
-                url = pageViewerFragment.loadWeb(pageControlFragment.getUserInputUrl());
+                pageViewerFragment.loadWeb(pageControlFragment.getUserInputUrl());
                 break;
             case R.id.backButton:// back
-                url = pageViewerFragment.goBack();
+                pageViewerFragment.goBack();
                 break;
             case R.id.nextButton:// next
-                url = pageViewerFragment.goNext();
+                pageViewerFragment.goNext();
                 break;
         }
-        // change the corresponding url
-        if(url != null){
-            pageControlFragment.setInputViewUrl(pageViewerFragment.getCurrentURL());
-        }
+    }
+
+    @Override
+    public void addNewPage() {
+
+    }
+
+    @Override
+    public void updateUrl(String url) {
+        pageControlFragment.setInputViewUrl(url);
     }
 }

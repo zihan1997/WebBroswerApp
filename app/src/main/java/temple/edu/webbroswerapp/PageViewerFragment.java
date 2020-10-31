@@ -30,9 +30,8 @@ import android.widget.Toast;
 
 public class PageViewerFragment extends Fragment {
 
-    private OrientationEventListener orientationEventListener;
+    private PageViewerInterface parentAct;
     protected WebView webView;
-    private String KEY_WebView = "WebView";
 
     public PageViewerFragment() {
         // Required empty public constructor
@@ -48,26 +47,20 @@ public class PageViewerFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        Bundle bundle = new Bundle();
-        webView.saveState(bundle);
-        outState.putBundle(KEY_WebView, bundle);
+        webView.saveState(outState);
         super.onSaveInstanceState(outState);
     }
 
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
 
-        orientationEventListener = new OrientationEventListener(getActivity()){
-
-            @Override
-            public void onOrientationChanged(int i) {
-                if(i >= 0){
-                    webView.reload();
-                }
-            }
-        };
-        orientationEventListener.enable();
+        if(context instanceof PageViewerInterface){
+            parentAct = (PageViewerInterface) context;
+        }else {
+            throw  new RuntimeException(("You must implement the required interface"));
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -78,9 +71,10 @@ public class PageViewerFragment extends Fragment {
         View l = inflater.inflate(R.layout.fragment_page_viewer, container, false);
 
         webView = l.findViewById(R.id.webView);
+        webView.getSettings().setJavaScriptEnabled(true);
 
         if(savedInstanceState != null){
-            webView.restoreState(savedInstanceState.getBundle(KEY_WebView));
+            webView.restoreState(savedInstanceState);
             webView.reload();
         }
 
@@ -93,7 +87,7 @@ public class PageViewerFragment extends Fragment {
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                ((BrowserActivity)getActivity()).pageControlFragment.setInputViewUrl(url);
+                parentAct.updateUrl(url);
                 super.onPageStarted(view, url, favicon);
             }
         });
@@ -146,6 +140,10 @@ public class PageViewerFragment extends Fragment {
             Toast.makeText(getActivity(), "cannot go next!", Toast.LENGTH_SHORT).show();
             return null;
         }
+    }
+
+    interface PageViewerInterface{
+        void updateUrl(String url);
     }
 
 }
