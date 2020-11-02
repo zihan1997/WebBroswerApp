@@ -1,20 +1,21 @@
 package temple.edu.webbroswerapp;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 public class PagerFragment extends Fragment {
 
-    protected ViewPager2 list;
+    protected ViewPager viewPager;
+    protected PagerViewInterface parentAct;
 
     public PagerFragment() {
         // Required empty public constructor
@@ -37,30 +38,49 @@ public class PagerFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof PagerViewInterface){
+            parentAct = (PagerViewInterface) context;
+        }else{
+            throw new RuntimeException("Please implement setAdapterInterface");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View l = inflater.inflate(R.layout.fragment_pager, container, false);
 
-        // find PagerView2, set listener
-        list = l.findViewById(R.id.pagerView);
+        // find PagerView, set listener
+        viewPager = l.findViewById(R.id.pagerView);
 
         // set adapter
-        list.setAdapter(new FragmentStateAdapter(getActivity()) {
-            @NonNull
+        parentAct.setViewAdapter();
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public Fragment createFragment(int position) {
-                return null;
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
             }
 
             @Override
-            public int getItemCount() {
-                return 0;
+            public void onPageSelected(int position) {
+                Log.d("========", String.valueOf(position));
+                parentAct.onPagerListener(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 
-
-
         return l;
+    }
+
+    interface PagerViewInterface {
+        void setViewAdapter();
+        void onPagerListener(int position);
     }
 }

@@ -69,6 +69,7 @@ public class PageViewerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View l = inflater.inflate(R.layout.fragment_page_viewer, container, false);
+        l.setBackgroundColor(Color.MAGENTA);
 
         webView = l.findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -90,6 +91,12 @@ public class PageViewerFragment extends Fragment {
                 parentAct.updateUrl(url);
                 super.onPageStarted(view, url, favicon);
             }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                parentAct.updateTitle(view);
+                super.onPageFinished(view, url);
+            }
         });
 
         return l;
@@ -101,14 +108,8 @@ public class PageViewerFragment extends Fragment {
 
 
     @SuppressLint("SetJavaScriptEnabled")
-    public String loadWeb(String url){
-        if(((BrowserActivity)getActivity()).pageControlFragment.userInput.hasFocus()){
+    public void loadWeb(String url){
             webView.loadUrl(url);
-        }else{
-            webView.reload();
-        }
-
-        return webView.getUrl();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -144,6 +145,7 @@ public class PageViewerFragment extends Fragment {
 
     interface PageViewerInterface{
         void updateUrl(String url);
+        void updateTitle(WebView view);
     }
 
 }
