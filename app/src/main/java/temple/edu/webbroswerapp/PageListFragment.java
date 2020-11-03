@@ -1,12 +1,16 @@
 package temple.edu.webbroswerapp;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,6 +19,8 @@ import android.view.ViewGroup;
  */
 public class PageListFragment extends Fragment {
 
+    protected ListView listView;
+    protected PagerListInterface parentAct;
 
     public PageListFragment() {
         // Required empty public constructor
@@ -25,6 +31,16 @@ public class PageListFragment extends Fragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        if(context instanceof PagerListInterface ){
+            parentAct = (PagerListInterface) context;
+        }else{
+            throw  new RuntimeException(("You must implement the required interface"));
+        }
+        super.onAttach(context);
     }
 
     @Override
@@ -40,6 +56,31 @@ public class PageListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_page_list, container, false);
+        View l = inflater.inflate(R.layout.fragment_page_list, container, false);
+
+        listView = l.findViewById(R.id.urlTitleList);
+//
+//        parentAct.setListViewAdapter(listView);
+//
+//        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+////                parentAct.updateDisplay(i);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+
+
+
+        return l;
+    }
+
+    interface PagerListInterface{
+        void setListViewAdapter(ListView view);
+        void updateDisplay(int i);
     }
 }

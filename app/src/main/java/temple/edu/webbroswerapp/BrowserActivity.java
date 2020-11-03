@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,8 @@ public class BrowserActivity extends AppCompatActivity
         implements PageControlFragment.ChooseInterface,
         PageViewerFragment.PageViewerInterface,
         BrowserControlFragment.AddNewPageInterface,
-        PagerFragment.PagerViewInterface {
+        PagerFragment.PagerViewInterface,
+        PageListFragment.PagerListInterface{
 
     protected PageControlFragment pageControlFragment;
     PageViewerFragment pageViewerFragment;
@@ -36,7 +38,10 @@ public class BrowserActivity extends AppCompatActivity
 
         // set up pager
         fragments = new ArrayList<>();
-        fragments.add(new PageViewerFragment());
+        PageViewerFragment homePage = new PageViewerFragment();
+//        homePage.loadWeb("www.google.com");
+        fragments.add(homePage);
+
 
         // If fragments already added
         final FragmentManager fm = getSupportFragmentManager();
@@ -80,6 +85,14 @@ public class BrowserActivity extends AppCompatActivity
                     .commit();
         }
 
+        if( (tempFragment = fm.findFragmentById(R.id.page_list)) instanceof PageListFragment ){
+            pageListFragment = (PageListFragment) tempFragment;
+        }else{
+            pageListFragment = PageListFragment.newInstance();
+            fm.beginTransaction()
+                    .add(R.id.page_list, pageListFragment)
+                    .commit();
+        }
 
     }
 
@@ -116,6 +129,8 @@ public class BrowserActivity extends AppCompatActivity
         fragments.add(new PageViewerFragment());
         Log.d("fragments", String.valueOf(fragments.size()) );
         pagerFragment.viewPager.getAdapter().notifyDataSetChanged();
+//        pageListFragment.listView.getAdapter().
+
     }
 
     @Override
@@ -131,7 +146,6 @@ public class BrowserActivity extends AppCompatActivity
             @Override
             public Fragment getItem(int position) {
 
-                Log.d("view chagned", "view changed");
                 return fragments.get(position);
             }
 
@@ -149,9 +163,18 @@ public class BrowserActivity extends AppCompatActivity
     public void onPagerListener(int position) {
         String url = fragments.get(position).getCurrentURL();
         pageControlFragment.setInputViewUrl(url);
+        setTitle(fragments.get(position).webView.getTitle());
+    }
 
-//        String title = String.valueOf(pagerFragment.viewPager.getAdapter().getPageTitle(position));
-//        setTitle(title);
-//        Log.d("===", title);
+    @Override
+    public void setListViewAdapter(ListView view) {
+        PageListAdapter listAdapter = new PageListAdapter( fragments, this);
+        view.setAdapter(listAdapter);
+    }
+
+    @Override
+    public void updateDisplay(int i) {
+        int position = pagerFragment.viewPager.getCurrentItem();
+        pagerFragment.viewPager.setCurrentItem(position);
     }
 }
