@@ -71,6 +71,12 @@ public class PageViewerFragment extends Fragment implements Serializable {
         webView.setWebViewClient(new WebViewClient(){
 
             @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                webView.loadUrl(String.valueOf(request.getUrl()));
+                return super.shouldOverrideUrlLoading(view, request);
+            }
+
+            @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 parentAct.updateUrl(url);
@@ -80,7 +86,6 @@ public class PageViewerFragment extends Fragment implements Serializable {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 parentAct.updateTitle(view);
-//                parentAct.updateList();
 
             }
         });
@@ -125,7 +130,7 @@ public class PageViewerFragment extends Fragment implements Serializable {
             return webView.copyBackForwardList().getItemAtIndex(index).getUrl();
 
         }else {
-            Toast.makeText(getActivity(), "cannot go back!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "cannot go back!", Toast.LENGTH_SHORT).show();
             return null;
         }
     }
@@ -140,7 +145,7 @@ public class PageViewerFragment extends Fragment implements Serializable {
 
             return webView.copyBackForwardList().getItemAtIndex(index).getUrl();
         }else{
-            Toast.makeText(getActivity(), "cannot go next!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "cannot go next!", Toast.LENGTH_SHORT).show();
             return null;
         }
     }

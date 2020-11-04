@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,14 +63,11 @@ public class PageListFragment extends Fragment {
 
         parentAct.setListViewAdapter(listView);
 
-        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 parentAct.updateDisplay(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                Log.d("updateDisplay", "clicked");
             }
         });
 

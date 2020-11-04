@@ -11,8 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -143,7 +143,7 @@ public class BrowserActivity extends AppCompatActivity
 
     @Override
     public void updateDisplay(int i) {
-        pagerFragment.viewPager.setCurrentItem(i);
+        pagerFragment.viewPager.setCurrentItem(i, true);
         Log.d("updateDisplay", "clicked");
     }
 }

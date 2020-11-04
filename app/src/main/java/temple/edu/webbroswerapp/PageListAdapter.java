@@ -42,12 +42,14 @@ public class PageListAdapter extends BaseAdapter {
             textView = new TextView(context);
             textView.setPadding(5,5,5,5);
             textView.setTextSize(20);
-//            textView.setText("--------");
             if(fragments.get(i).webView.getTitle() != null){
                 textView.setText(fragments.get(i).webView.getTitle().toString());
                 notifyDataSetChanged();
+            }else{
+                textView.setText("");
             }
             Log.d("title",fragments.get(i).webView.getTitle().toString());
+            notifyDataSetChanged();
         }else {
             textView = (TextView) view;
         }
