@@ -59,22 +59,19 @@ public class PageListFragment extends Fragment {
         View l = inflater.inflate(R.layout.fragment_page_list, container, false);
 
         listView = l.findViewById(R.id.urlTitleList);
-//
-//        parentAct.setListViewAdapter(listView);
-//
-//        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-////                parentAct.updateDisplay(i);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
 
+        parentAct.setListViewAdapter(listView);
 
+        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                parentAct.updateDisplay(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         return l;
     }

@@ -27,8 +27,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import java.io.Serializable;
 
-public class PageViewerFragment extends Fragment {
+
+public class PageViewerFragment extends Fragment implements Serializable {
 
     private PageViewerInterface parentAct;
     protected WebView webView;
@@ -43,12 +45,6 @@ public class PageViewerFragment extends Fragment {
         PageViewerFragment fragment = new PageViewerFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        webView.saveState(outState);
-        super.onSaveInstanceState(outState);
     }
 
 
@@ -69,38 +65,40 @@ public class PageViewerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View l = inflater.inflate(R.layout.fragment_page_viewer, container, false);
-        l.setBackgroundColor(Color.MAGENTA);
 
         webView = l.findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient(){
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                parentAct.updateUrl(url);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                parentAct.updateTitle(view);
+//                parentAct.updateList();
+
+            }
+        });
 
         if(savedInstanceState != null){
             webView.restoreState(savedInstanceState);
             webView.reload();
         }
 
-        webView.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                view.loadUrl(request.getUrl().toString());
-                return true;
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                parentAct.updateUrl(url);
-                super.onPageStarted(view, url, favicon);
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                parentAct.updateTitle(view);
-                super.onPageFinished(view, url);
-            }
-        });
-
         return l;
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        webView.saveState(outState);
+    }
+
 
     public String getCurrentURL(){
         return webView.getUrl();
@@ -110,6 +108,10 @@ public class PageViewerFragment extends Fragment {
     @SuppressLint("SetJavaScriptEnabled")
     public void loadWeb(String url){
             webView.loadUrl(url);
+    }
+
+    public String getTitle(){
+        return webView.getTitle();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -146,6 +148,7 @@ public class PageViewerFragment extends Fragment {
     interface PageViewerInterface{
         void updateUrl(String url);
         void updateTitle(WebView view);
+        void updateList();
     }
 
 }

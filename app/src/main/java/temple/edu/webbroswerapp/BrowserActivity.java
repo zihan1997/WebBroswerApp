@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -27,21 +28,14 @@ public class BrowserActivity extends AppCompatActivity
     BrowserControlFragment browserControlFragment;
     PageListFragment pageListFragment;
     PagerFragment pagerFragment;
+    PageListAdapter listAdapter;
 
-    ArrayList<PageViewerFragment> fragments;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
-
-        // set up pager
-        fragments = new ArrayList<>();
-        PageViewerFragment homePage = new PageViewerFragment();
-//        homePage.loadWeb("www.google.com");
-        fragments.add(homePage);
-
 
         // If fragments already added
         final FragmentManager fm = getSupportFragmentManager();
@@ -55,15 +49,6 @@ public class BrowserActivity extends AppCompatActivity
                     .add(R.id.page_control, pageControlFragment)
                     .commit();
 
-        }
-
-        if((tempFragment = fm.findFragmentById(R.id.pagerView)) instanceof PageViewerFragment){
-            pageViewerFragment = (PageViewerFragment)tempFragment;
-        }else {
-            pageViewerFragment = PageViewerFragment.newInstance();
-            fm.beginTransaction()
-                    .add(R.id.page_display, pageViewerFragment)
-                    .commit();
         }
 
 
@@ -85,13 +70,15 @@ public class BrowserActivity extends AppCompatActivity
                     .commit();
         }
 
-        if( (tempFragment = fm.findFragmentById(R.id.page_list)) instanceof PageListFragment ){
-            pageListFragment = (PageListFragment) tempFragment;
-        }else{
-            pageListFragment = PageListFragment.newInstance();
-            fm.beginTransaction()
-                    .add(R.id.page_list, pageListFragment)
-                    .commit();
+        if(findViewById(R.id.page_list) != null){
+            if( (tempFragment = fm.findFragmentById(R.id.page_list)) instanceof PageListFragment ){
+                pageListFragment = (PageListFragment) tempFragment;
+            }else{
+                pageListFragment = PageListFragment.newInstance();
+                fm.beginTransaction()
+                        .add(R.id.page_list, pageListFragment)
+                        .commit();
+            }
         }
 
     }
@@ -101,13 +88,13 @@ public class BrowserActivity extends AppCompatActivity
         int position = pagerFragment.viewPager.getCurrentItem();
         switch (view.getId()){
             case R.id.goButton:// Go feature
-                fragments.get(position).loadWeb(pageControlFragment.getUserInputUrl());
+                pagerFragment.fragments.get(position).loadWeb(pageControlFragment.getUserInputUrl());
                 break;
             case R.id.backButton:// back
-                fragments.get(position).goBack();
+                pagerFragment.fragments.get(position).goBack();
                 break;
             case R.id.nextButton:// next
-                fragments.get(position).goNext();
+                pagerFragment.fragments.get(position).goNext();
                 break;
         }
     }
@@ -123,58 +110,40 @@ public class BrowserActivity extends AppCompatActivity
         setTitle(view.getTitle());
     }
 
-
     @Override
-    public void addNewPage() {
-        fragments.add(new PageViewerFragment());
-        Log.d("fragments", String.valueOf(fragments.size()) );
-        pagerFragment.viewPager.getAdapter().notifyDataSetChanged();
-//        pageListFragment.listView.getAdapter().
-
+    public void updateList() {
+        listAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void setViewAdapter() {
-
-        pagerFragment.viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public int getCount() {
-                return fragments.size();
-            }
-
-            @NonNull
-            @Override
-            public Fragment getItem(int position) {
-
-                return fragments.get(position);
-            }
-
-            @Nullable
-            @Override
-            public CharSequence getPageTitle(int position) {
-//                setTitle(super.getPageTitle(position));
-                return super.getPageTitle(position);
-            }
-
-        });
+    public void addNewPage() {
+        pagerFragment.adapter.addInstance();
+        pagerFragment.viewPager.getAdapter().notifyDataSetChanged();
+        if(findViewById(R.id.page_list) != null) {
+            Log.d("pagelist", "new page added");
+            listAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onPagerListener(int position) {
-        String url = fragments.get(position).getCurrentURL();
+        String url = pagerFragment.fragments.get(position).getCurrentURL();
+        // update the url
         pageControlFragment.setInputViewUrl(url);
-        setTitle(fragments.get(position).webView.getTitle());
+        // update the title
+        setTitle(pagerFragment.fragments.get(position).webView.getTitle());
     }
 
+    // PageListFragment
     @Override
     public void setListViewAdapter(ListView view) {
-        PageListAdapter listAdapter = new PageListAdapter( fragments, this);
+        listAdapter = new PageListAdapter( pagerFragment.fragments, this);
         view.setAdapter(listAdapter);
     }
 
     @Override
     public void updateDisplay(int i) {
-        int position = pagerFragment.viewPager.getCurrentItem();
-        pagerFragment.viewPager.setCurrentItem(position);
+        pagerFragment.viewPager.setCurrentItem(i);
+        Log.d("updateDisplay", "clicked");
     }
 }

@@ -11,8 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BrowserActivity"
-            android:configChanges="orientation|keyboard">
+        <activity android:name=".BrowserActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

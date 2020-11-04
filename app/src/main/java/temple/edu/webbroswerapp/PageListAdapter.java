@@ -1,6 +1,7 @@
 package temple.edu.webbroswerapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -25,7 +26,7 @@ public class PageListAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return fragments.get(i).webView.getTitle();
+        return fragments.get(i);
     }
 
     @Override
@@ -41,11 +42,15 @@ public class PageListAdapter extends BaseAdapter {
             textView = new TextView(context);
             textView.setPadding(5,5,5,5);
             textView.setTextSize(20);
-                textView.setText(fragments.get(i).webView.getTitle());
+//            textView.setText("--------");
+            if(fragments.get(i).webView.getTitle() != null){
+                textView.setText(fragments.get(i).webView.getTitle().toString());
+                notifyDataSetChanged();
+            }
+            Log.d("title",fragments.get(i).webView.getTitle().toString());
         }else {
             textView = (TextView) view;
         }
-
 
         return textView;
     }
