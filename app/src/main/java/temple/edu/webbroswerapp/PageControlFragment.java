@@ -54,7 +54,6 @@ public class PageControlFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View l = inflater.inflate(R.layout.fragment_page_control, container, false);
-//        l.setBackgroundColor(Color.DKGRAY);
 
         // ID for editView
         userInput = l.findViewById(R.id.inputView);

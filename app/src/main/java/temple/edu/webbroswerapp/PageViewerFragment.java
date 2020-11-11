@@ -118,33 +118,17 @@ public class PageViewerFragment extends Fragment {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    public String goBack(){
+    public void goBack(){
         // Check if the key event was the Back button and if there's history
         if (webView.canGoBack()) {
             webView.goBack();
-
-            // get current url
-            int index = webView.copyBackForwardList().getCurrentIndex();
-            return webView.copyBackForwardList().getItemAtIndex(index).getUrl();
-
-        }else {
-            Toast.makeText(getActivity(), "cannot go back!", Toast.LENGTH_SHORT).show();
-            return null;
         }
     }
 
-    public String goNext(){
+    public void goNext(){
         // Check if the key event was the next button and if there's history
         if (webView.canGoForward()) {
             webView.goForward();
-
-            // get the current url
-            int index = webView.copyBackForwardList().getCurrentIndex();
-
-            return webView.copyBackForwardList().getItemAtIndex(index).getUrl();
-        }else{
-            Toast.makeText(getActivity(), "cannot go next!", Toast.LENGTH_SHORT).show();
-            return null;
         }
     }
 

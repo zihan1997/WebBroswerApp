@@ -38,15 +38,11 @@ public class BrowserActivity extends AppCompatActivity
                 url = pageViewerFragment.loadWeb(pageControlFragment.getUserInputUrl());
                 break;
             case R.id.backButton:// back
-                url = pageViewerFragment.goBack();
+                pageViewerFragment.goBack();
                 break;
             case R.id.nextButton:// next
-                url = pageViewerFragment.goNext();
+                pageViewerFragment.goNext();
                 break;
-        }
-        // change the corresponding url
-        if(url != null){
-            pageControlFragment.setInputViewUrl(pageViewerFragment.getCurrentURL());
         }
     }
 }
