@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 public class PageViewerFragment extends Fragment {
 
-    private OrientationEventListener orientationEventListener;
+    protected PageViewerInterface parentAct;
     protected WebView webView;
     private String KEY_WebView = "WebView";
 
@@ -48,26 +48,24 @@ public class PageViewerFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        Bundle bundle = new Bundle();
-        webView.saveState(bundle);
-        outState.putBundle(KEY_WebView, bundle);
+        webView.saveState(outState);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof PageViewerInterface){
+            parentAct = (BrowserActivity) context;
+        }else{
+            throw new RuntimeException("PageViewerFragment is not implemented");
+        }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        orientationEventListener = new OrientationEventListener(getActivity()){
-
-            @Override
-            public void onOrientationChanged(int i) {
-                if(i >= 0){
-                    webView.reload();
-                }
-            }
-        };
-        orientationEventListener.enable();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -79,24 +77,27 @@ public class PageViewerFragment extends Fragment {
 
         webView = l.findViewById(R.id.webView);
 
-        if(savedInstanceState != null){
-            webView.restoreState(savedInstanceState.getBundle(KEY_WebView));
-            webView.reload();
-        }
 
         webView.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                view.loadUrl(request.getUrl().toString());
-                return true;
-            }
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//                view.loadUrl(request.getUrl().toString());
+//                return true;
+//            }
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                ((BrowserActivity)getActivity()).pageControlFragment.setInputViewUrl(url);
+//                ((BrowserActivity)getActivity()).pageControlFragment.setInputViewUrl(url);
+                parentAct.updateUrl(url);
                 super.onPageStarted(view, url, favicon);
             }
         });
+
+
+        if(savedInstanceState != null){
+            webView.restoreState(savedInstanceState);
+            webView.reload();
+        }
 
         return l;
     }
@@ -107,14 +108,8 @@ public class PageViewerFragment extends Fragment {
 
 
     @SuppressLint("SetJavaScriptEnabled")
-    public String loadWeb(String url){
-        if(((BrowserActivity)getActivity()).pageControlFragment.userInput.hasFocus()){
-            webView.loadUrl(url);
-        }else{
-            webView.reload();
-        }
-
-        return webView.getUrl();
+    public void loadWeb(String url){
+        webView.loadUrl(url);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -125,6 +120,7 @@ public class PageViewerFragment extends Fragment {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     public void goNext(){
         // Check if the key event was the next button and if there's history
         if (webView.canGoForward()) {
@@ -132,4 +128,7 @@ public class PageViewerFragment extends Fragment {
         }
     }
 
+    interface PageViewerInterface{
+        void updateUrl(String url);
+    }
 }

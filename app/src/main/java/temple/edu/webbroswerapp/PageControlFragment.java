@@ -1,14 +1,11 @@
 package temple.edu.webbroswerapp;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,21 +64,21 @@ public class PageControlFragment extends Fragment {
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                parentAct.chooseDirection(view);
+                parentAct.direction(view);
             }
         });
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                parentAct.chooseDirection(view);
+                parentAct.direction(view);
             }
         });
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                parentAct.chooseDirection(view);
+                parentAct.direction(view);
             }
         });
 
@@ -93,7 +90,7 @@ public class PageControlFragment extends Fragment {
      * @return corrected Url
      */
     public String getUserInputUrl(){
-        String url = "";
+        String url ;
         if(userInput.getText() != null){
             String partialUrl = String.valueOf(userInput.getText());
             if(!partialUrl.startsWith("https://")){
@@ -113,6 +110,6 @@ public class PageControlFragment extends Fragment {
 
 
     interface ChooseInterface{
-        void chooseDirection(View view);
+        void direction(View view);
     }
 }
