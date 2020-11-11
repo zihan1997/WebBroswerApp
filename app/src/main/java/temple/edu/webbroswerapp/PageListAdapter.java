@@ -26,7 +26,7 @@ public class PageListAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return fragments.get(i);
+        return fragments.get(i).webView.getTitle();
     }
 
     @Override
@@ -42,14 +42,7 @@ public class PageListAdapter extends BaseAdapter {
             textView = new TextView(context);
             textView.setPadding(5,5,5,5);
             textView.setTextSize(20);
-            if(fragments.get(i).webView.getTitle() != null){
-                textView.setText(fragments.get(i).webView.getTitle().toString());
-                notifyDataSetChanged();
-            }else{
-                textView.setText("");
-            }
-            Log.d("title",fragments.get(i).webView.getTitle().toString());
-            notifyDataSetChanged();
+            textView.setText(fragments.get(i).webView.getTitle());
         }else {
             textView = (TextView) view;
         }

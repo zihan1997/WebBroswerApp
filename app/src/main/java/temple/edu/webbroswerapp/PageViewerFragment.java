@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebBackForwardList;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -69,7 +72,6 @@ public class PageViewerFragment extends Fragment implements Serializable {
         webView = l.findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient(){
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 webView.loadUrl(String.valueOf(request.getUrl()));
@@ -85,14 +87,24 @@ public class PageViewerFragment extends Fragment implements Serializable {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                parentAct.updateTitle(view);
+//                parentAct.updateTitle(view);
+                parentAct.updateViewList(view);
+            }
 
+        });
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                parentAct.updateTitle(view);
             }
         });
 
         if(savedInstanceState != null){
             webView.restoreState(savedInstanceState);
             webView.reload();
+        }else{
+            webView.loadUrl(webView.getUrl());
         }
 
         return l;
@@ -120,40 +132,24 @@ public class PageViewerFragment extends Fragment implements Serializable {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    public String goBack(){
+    public void goBack(){
         // Check if the key event was the Back button and if there's history
         if (webView.canGoBack()) {
             webView.goBack();
-
-            // get current url
-            int index = webView.copyBackForwardList().getCurrentIndex();
-            return webView.copyBackForwardList().getItemAtIndex(index).getUrl();
-
-        }else {
-//            Toast.makeText(getActivity(), "cannot go back!", Toast.LENGTH_SHORT).show();
-            return null;
         }
     }
 
-    public String goNext(){
+    public void goNext(){
         // Check if the key event was the next button and if there's history
         if (webView.canGoForward()) {
             webView.goForward();
-
-            // get the current url
-            int index = webView.copyBackForwardList().getCurrentIndex();
-
-            return webView.copyBackForwardList().getItemAtIndex(index).getUrl();
-        }else{
-//            Toast.makeText(getActivity(), "cannot go next!", Toast.LENGTH_SHORT).show();
-            return null;
         }
     }
 
     interface PageViewerInterface{
         void updateUrl(String url);
         void updateTitle(WebView view);
-        void updateList();
+        void updateViewList(WebView view);
     }
 
 }

@@ -66,7 +66,7 @@ public class PageListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                parentAct.updateDisplay(i);
+                parentAct.switchDisplay(i);
                 Log.d("updateDisplay", "clicked");
             }
         });
@@ -76,6 +76,6 @@ public class PageListFragment extends Fragment {
 
     interface PagerListInterface{
         void setListViewAdapter(ListView view);
-        void updateDisplay(int i);
+        void switchDisplay(int i);
     }
 }
