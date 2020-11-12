@@ -130,9 +130,9 @@ public class BrowserActivity extends AppCompatActivity
         pageControlFragment.setInputViewUrl("");
         setTitle("");
 
-//        if(findViewById(R.id.page_list) != null){
-//            pageListFragment.notifyChange();
-//        }
+        if(findViewById(R.id.page_list) != null){
+            pageListFragment.notifyChange();
+        }
     }
 
     @Override

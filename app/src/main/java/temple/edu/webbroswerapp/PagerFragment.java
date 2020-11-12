@@ -100,6 +100,14 @@ public class PagerFragment extends Fragment {
                 fragments.set(position, (PageViewerFragment) ret);
                 return ret;
             }
+
+            @Override
+            public int getItemPosition(@NonNull Object object) {
+                if (fragments.contains(object))
+                    return fragments.indexOf(object);
+                else
+                    return POSITION_NONE;
+            }
         };
 
     }
@@ -116,7 +124,7 @@ public class PagerFragment extends Fragment {
             Log.d("-----", "VPager restores");
             vPager.onRestoreInstanceState(savedInstanceState.getParcelable(vPager_KEY));
         }
-
+        vPager.setOffscreenPageLimit(4);
         vPager.setAdapter(adapter);
         vPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

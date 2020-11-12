@@ -203,14 +203,14 @@ public class PageListFragment extends Fragment {
         public View getView(int i, View view, ViewGroup viewGroup) {
             TextView textView;
 
-            if(view == null){
+//            if(view == null){
                 textView = new TextView(context);
                 textView.setPadding(5,5,5,5);
                 textView.setTextSize(20);
                 textView.setText(fragments.get(i).webView.getTitle());
-            }else {
-                textView = (TextView) view;
-            }
+//            }else {
+//                textView = (TextView) view;
+//            }
 
             return textView;
         }
