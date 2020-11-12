@@ -27,6 +27,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import java.io.Serializable;
+
 
 public class PageViewerFragment extends Fragment {
 
@@ -91,6 +93,13 @@ public class PageViewerFragment extends Fragment {
                 parentAct.updateUrl(url);
                 super.onPageStarted(view, url, favicon);
             }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                parentAct.updateTitle(view.getTitle());
+                parentAct.updateViewList();
+            }
         });
 
 
@@ -104,6 +113,10 @@ public class PageViewerFragment extends Fragment {
 
     public String getCurrentURL(){
         return webView.getUrl();
+    }
+
+    public String getTitle(){
+        return webView.getTitle();
     }
 
 
@@ -130,5 +143,7 @@ public class PageViewerFragment extends Fragment {
 
     interface PageViewerInterface{
         void updateUrl(String url);
+        void updateTitle(String title);
+        void updateViewList();
     }
 }

@@ -5,4 +5,5 @@
     <string name="go_to_next_page">go to next page</string>
     <string name="go_back_to_the_page">go back to the page</string>
     <string name="go_to_the_url">go to the url</string>
+    <string name="add_new_page">add new page</string>
 </resources>
