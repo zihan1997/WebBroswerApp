@@ -115,9 +115,9 @@ public class BrowserActivity extends AppCompatActivity
         String title = pagerFragment.fragments.get(position).getTitle();
         setTitle(title);
 
-        if(findViewById(R.id.page_list) != null){
-            pageListFragment.notifyChange();
-        }
+//        if(findViewById(R.id.page_list) != null){
+//            pageListFragment.notifyChange();
+//        }
     }
 
     @Override
@@ -130,9 +130,9 @@ public class BrowserActivity extends AppCompatActivity
         pageControlFragment.setInputViewUrl("");
         setTitle("");
 
-        if(findViewById(R.id.page_list) != null){
-            pageListFragment.notifyChange();
-        }
+//        if(findViewById(R.id.page_list) != null){
+//            pageListFragment.notifyChange();
+//        }
     }
 
     @Override
