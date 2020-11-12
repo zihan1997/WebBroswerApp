@@ -62,11 +62,6 @@ public class PageListFragment extends Fragment {
 //            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        if(parentAct.getPagerFragment() !=null){
-            fragments = parentAct.getPagerFragment();
-        }
-
-        adapter = new PageListAdapter(fragments, getActivity());
 
 //        adapter = new ListAdapter() {
 //            @Override
@@ -150,6 +145,11 @@ public class PageListFragment extends Fragment {
         View l = inflater.inflate(R.layout.fragment_page_list, container, false);
 
         listView = l.findViewById(R.id.viewList);
+
+        if(parentAct.getPagerFragment() !=null){
+            fragments = parentAct.getPagerFragment();
+        }
+        adapter = new PageListAdapter(fragments, getActivity());
 
         listView.setAdapter(adapter);
 

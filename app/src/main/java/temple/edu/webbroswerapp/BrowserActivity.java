@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class BrowserActivity extends AppCompatActivity
         }
 
         if(findViewById(R.id.page_list) != null){
+            Log.d("-----", "there is page List");
             if( (tempFragment = fm.findFragmentById(R.id.page_list)) instanceof PageListFragment ){
                 pageListFragment = (PageListFragment) tempFragment;
             }else{
@@ -135,11 +137,7 @@ public class BrowserActivity extends AppCompatActivity
 
     @Override
     public ArrayList<PageViewerFragment> getPagerFragment() {
-        if(pagerFragment.fragments != null) {
-            return pagerFragment.fragments;
-        }else{
-            return null;
-        }
+        return pagerFragment.fragments;
     }
 
     @Override
