@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".BrowserControlFragment">
+
+    <ImageButton
+        android:id="@+id/displayBookmarkButton"
+        android:layout_width="127dp"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/display_bookmarks"
+        android:src="@android:drawable/ic_input_get" />
+
+    <ImageButton
+        android:id="@+id/saveBookMarksButton"
+        android:layout_width="130dp"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/save_marks"
+        android:src="@android:drawable/ic_menu_save" />
 
     <ImageButton
         android:id="@+id/addButton"
@@ -12,4 +27,5 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/add_new_page"
         android:src="@android:drawable/ic_menu_add" />
-</FrameLayout>
+
+</LinearLayout>
