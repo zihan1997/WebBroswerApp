@@ -1,6 +1,8 @@
 package temple.edu.webbroswerapp;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +33,12 @@ public class BookMarkAdapter extends RecyclerView.Adapter<BookMarkAdapter.ViewHo
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
-
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("bookmark", "Element " + getAdapterPosition() + " clicked.");
+                }
+            });
             text1 = view.findViewById(R.id.text1);
             deleteButton = view.findViewById(R.id.deleteButton);
         }
@@ -44,13 +51,17 @@ public class BookMarkAdapter extends RecyclerView.Adapter<BookMarkAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context)
-                .inflate(R.layout.bookmark_adapter_layout,parent,false));
+//        return new ViewHolder(LayoutInflater.from(parent.getContext())
+//                .inflate(R.layout.bookmark_adapter_layout,parent,false));
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.bookmark_adapter_layout,parent,false);
+
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BookMarkAdapter.ViewHolder holder, final int position) {
-        holder.text1.setText(bookmarksList.get(position));
+        holder.getTextView().setText(bookmarksList.get(position));
         // url click listener
         holder.text1.setOnClickListener(new View.OnClickListener() {
             @Override
