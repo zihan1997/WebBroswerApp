@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.JsonWriter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -37,7 +38,6 @@ public class BookmarksActivity extends AppCompatActivity implements BookMarkInte
     private String title_KEY = "title";
     protected BookMarkAdapter adapter;
     protected LinearLayoutManager manager;
-    private final int REQUEST_CODE = 1111;
 
     StringBuilder stringBuilder;
     JSONObject jsonObject;
@@ -83,6 +83,7 @@ public class BookmarksActivity extends AppCompatActivity implements BookMarkInte
         findViewById(R.id.closebutton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setResult(RESULT_CANCELED);
                 finish();
             }
         });
@@ -136,7 +137,6 @@ public class BookmarksActivity extends AppCompatActivity implements BookMarkInte
 
     @Override
     public void bookmarkDeleted(final int position) {
-        // TODO dialog
         // pop out confirmation
         Dialog confirmDialog = new AlertDialog.Builder(this)
                 .setMessage("Delete "+ bookmarksList.get(position).getTitle()+" ?")
@@ -149,7 +149,7 @@ public class BookmarksActivity extends AppCompatActivity implements BookMarkInte
                                 Toast.LENGTH_LONG).show();
                         bookmarksList.remove(position);
                         adapter.notifyDataSetChanged();
-//                        reWriteFile();
+                        reWriteFile();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -167,11 +167,17 @@ public class BookmarksActivity extends AppCompatActivity implements BookMarkInte
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-            JSONArray jsonArray = new JSONArray(bookmarksList);
-
-
-            bufferedWriter.write(jsonArray.toString());
-            Log.d("json array", jsonArray.toString());
+            for(int i = 0; i < bookmarksList.size(); i++){
+                CustomBookmarks oneBookmark = bookmarksList.get(i);
+                JSONObject oneJson = new JSONObject();
+                try {
+                    oneJson.put(title_KEY, oneBookmark.getTitle());
+                    oneJson.put(url_KEY, oneBookmark.getUrl());
+                    bufferedWriter.write("\n" + oneJson.toString());
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
             bufferedWriter.close();
 
         }catch (IOException e){

@@ -202,15 +202,17 @@ public class BrowserActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //        assert data != null;
-        String title = data.getStringExtra(title_KEY);
-        String url = data.getStringExtra(url_KEY);
-        Log.d("getIntent--", title+" "+url);
+        if(resultCode == RESULT_OK) {
+            String title = data.getStringExtra(title_KEY);
+            String url = data.getStringExtra(url_KEY);
+            Log.d("getIntent--", title + " " + url);
 
-        // open new tap for the bookmark
-        addPage();
-        int size = getPagerFragment().size();
-        pagerFragment.vPager.setCurrentItem(size-1);
-        getPagerFragment().get(size-1).loadWeb(url);
+            // open new tap for the bookmark
+            addPage();
+            int size = getPagerFragment().size();
+            pagerFragment.vPager.setCurrentItem(size - 1);
+            getPagerFragment().get(size - 1).loadWeb(url);
+        }
     }
 
     @Override
