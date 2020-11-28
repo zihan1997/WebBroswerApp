@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +40,7 @@ public class BrowserActivity extends AppCompatActivity
     private final String title_KEY = "title";
     private final String url_KEY = "url";
     private final String FILE_NAME = "bookmarkList";
+    private final int REQUEST_CODE = 1111;
 
 
     @Override
@@ -89,15 +91,15 @@ public class BrowserActivity extends AppCompatActivity
             }
         }
 
-        if(getIntent() != null){
-
-            String title = getIntent().getStringExtra(title_KEY);
-            String url = getIntent().getStringExtra(url_KEY);
-            Log.d("getIntent", title+" "+url);
+//        if(getIntent() != null){
+//
+//            String title = getIntent().getStringExtra(title_KEY);
+//            String url = getIntent().getStringExtra(url_KEY);
+//            Log.d("getIntent", title+" "+url);
 //            pagerFragment.addPage();
 //            pagerFragment.vPager.setCurrentItem(0);
 //            pagerFragment.fragments.get(0).loadWeb(url);
-        }
+//        }
 
     }
 
@@ -177,7 +179,7 @@ public class BrowserActivity extends AppCompatActivity
         }catch (JSONException e){
             e.printStackTrace();
         }
-        Toast.makeText(this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
 
         // 3. write to the same file
         File file = new File(getFilesDir(),FILE_NAME);
@@ -185,9 +187,6 @@ public class BrowserActivity extends AppCompatActivity
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         bufferedWriter.write("\n"+jsonObject.toString());
         bufferedWriter.close();
-//        FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
-//        outputStream.write(jsonObject.toString().getBytes());
-//        outputStream.close();
 
         Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
 
@@ -195,7 +194,23 @@ public class BrowserActivity extends AppCompatActivity
 
     @Override
     public void openBookmarkPage() {
-        startActivity( new Intent(this, BookmarksActivity.class));
+        Intent intent = new Intent(this, BookmarksActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+//        assert data != null;
+        String title = data.getStringExtra(title_KEY);
+        String url = data.getStringExtra(url_KEY);
+        Log.d("getIntent--", title+" "+url);
+
+        // open new tap for the bookmark
+        addPage();
+        int size = getPagerFragment().size();
+        pagerFragment.vPager.setCurrentItem(size-1);
+        getPagerFragment().get(size-1).loadWeb(url);
     }
 
     @Override

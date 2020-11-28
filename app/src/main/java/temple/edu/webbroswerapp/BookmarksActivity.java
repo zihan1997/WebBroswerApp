@@ -37,6 +37,7 @@ public class BookmarksActivity extends AppCompatActivity implements BookMarkInte
     private String title_KEY = "title";
     protected BookMarkAdapter adapter;
     protected LinearLayoutManager manager;
+    private final int REQUEST_CODE = 1111;
 
     StringBuilder stringBuilder;
     JSONObject jsonObject;
@@ -52,12 +53,13 @@ public class BookmarksActivity extends AppCompatActivity implements BookMarkInte
         setTitle("Bookmark");
 
         try {
+            Log.d("load bookmark", "load bookmark");
             loadBookmarkFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        bookmarksList.add(new CustomBookmarks("Google", "www.google.com"));
-        bookmarksList.add(new CustomBookmarks("Amazon", "www.amazon.com"));
+//        bookmarksList.add(new CustomBookmarks("Google", "www.google.com"));
+//        bookmarksList.add(new CustomBookmarks("Amazon", "www.amazon.com"));
 
 
         // Adapter
@@ -123,11 +125,13 @@ public class BookmarksActivity extends AppCompatActivity implements BookMarkInte
 
     @Override
     public void bookmarkClicked(int position) {
-        Intent urlIntent = new Intent(BookmarksActivity.this, BrowserActivity.class);
-        urlIntent.putExtra(title_KEY, bookmarksList.get(position).getTitle());
-        urlIntent.putExtra(url_KEY, bookmarksList.get(position).getUrl());
-        setResult(Activity.RESULT_OK, urlIntent);
-        startActivity(urlIntent);
+//        Intent urlIntent = new Intent(BookmarksActivity.this, BrowserActivity.class);
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(title_KEY, bookmarksList.get(position).getTitle());
+        resultIntent.putExtra(url_KEY, bookmarksList.get(position).getUrl());
+        setResult(RESULT_OK, resultIntent);
+//        startActivity(urlIntent);
+        finish();
     }
 
     @Override
@@ -167,7 +171,7 @@ public class BookmarksActivity extends AppCompatActivity implements BookMarkInte
 
 
             bufferedWriter.write(jsonArray.toString());
-            Log.d("jsonarray", jsonArray.toString());
+            Log.d("json array", jsonArray.toString());
             bufferedWriter.close();
 
         }catch (IOException e){
