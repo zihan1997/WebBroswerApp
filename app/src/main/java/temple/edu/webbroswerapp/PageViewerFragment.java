@@ -30,11 +30,11 @@ import android.widget.Toast;
 import java.io.Serializable;
 
 
-public class PageViewerFragment extends Fragment {
+public class PageViewerFragment extends Fragment implements Serializable{
 
     protected PageViewerInterface parentAct;
-    protected WebView webView;
-    private String KEY_WebView = "WebView";
+    protected transient WebView webView;
+//    private String KEY_WebView = "WebView";
 
     public PageViewerFragment() {
         // Required empty public constructor

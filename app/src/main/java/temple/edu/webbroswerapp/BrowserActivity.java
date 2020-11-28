@@ -1,26 +1,44 @@
 package temple.edu.webbroswerapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class BrowserActivity extends AppCompatActivity
-        implements PageControlFragment.ChooseInterface,
+        implements Serializable,
+        PageControlFragment.ChooseInterface,
         PageViewerFragment.PageViewerInterface,
         PagerFragment.PagerFragmentInterface,
         BrowserControlFragment.BrowserControlInterface,
         PageListFragment.PageListInterface {
 
     PageControlFragment pageControlFragment;
-    PagerFragment pagerFragment;
+    transient PagerFragment pagerFragment;
     BrowserControlFragment browserControlFragment;
     PageListFragment pageListFragment;
+
+    private final String title_KEY = "title";
+    private final String url_KEY = "url";
+    private final String FILE_NAME = "bookmarkList";
 
 
     @Override
@@ -70,6 +88,17 @@ public class BrowserActivity extends AppCompatActivity
                         .commit();
             }
         }
+
+        if(getIntent() != null){
+
+            String title = getIntent().getStringExtra(title_KEY);
+            String url = getIntent().getStringExtra(url_KEY);
+            Log.d("getIntent", title+" "+url);
+//            pagerFragment.addPage();
+//            pagerFragment.vPager.setCurrentItem(0);
+//            pagerFragment.fragments.get(0).loadWeb(url);
+        }
+
     }
 
     @Override
@@ -133,6 +162,40 @@ public class BrowserActivity extends AppCompatActivity
         if(findViewById(R.id.page_list) != null){
             pageListFragment.notifyChange();
         }
+    }
+
+    @Override
+    public void saveCurrentToBookmarkPage() throws IOException {
+        // 1. get current page from pager
+        int position = pagerFragment.vPager.getCurrentItem();
+
+        // 2. add to bookmark arrayList
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(title_KEY, getPagerFragment().get(position).getTitle());
+            jsonObject.put(url_KEY, getPagerFragment().get(position).getCurrentURL());
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        Toast.makeText(this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
+
+        // 3. write to the same file
+        File file = new File(getFilesDir(),FILE_NAME);
+        FileWriter fileWriter = new FileWriter(file, true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        bufferedWriter.write("\n"+jsonObject.toString());
+        bufferedWriter.close();
+//        FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
+//        outputStream.write(jsonObject.toString().getBytes());
+//        outputStream.close();
+
+        Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void openBookmarkPage() {
+        startActivity( new Intent(this, BookmarksActivity.class));
     }
 
     @Override

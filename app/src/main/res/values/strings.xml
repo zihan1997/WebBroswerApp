@@ -9,4 +9,5 @@
     <string name="save_marks">save marks</string>
     <string name="display_bookmarks">display bookmarks</string>
     <string name="deleteicon">deleteIcon</string>
+    <string name="close">Close</string>
 </resources>

@@ -12,15 +12,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class BookMarkAdapter extends RecyclerView.Adapter<BookMarkAdapter.ViewHolder>{
+public class BookMarkAdapter extends RecyclerView.Adapter<BookMarkAdapter.ViewHolder> implements Serializable{
 
-    private ArrayList<String> bookmarksList;
+    private ArrayList<CustomBookmarks> bookmarksList;
     private Context context;
     private BookMarkInterface bookMarkInterface;
 
-    public BookMarkAdapter(ArrayList<String> bookmarks, Context context, BookMarkInterface bookMarkInterface){
+    public BookMarkAdapter(ArrayList<CustomBookmarks> bookmarks, Context context, BookMarkInterface bookMarkInterface){
         this.bookmarksList = bookmarks;
         this.context = context;
         this.bookMarkInterface = bookMarkInterface;
@@ -61,7 +62,7 @@ public class BookMarkAdapter extends RecyclerView.Adapter<BookMarkAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull BookMarkAdapter.ViewHolder holder, final int position) {
-        holder.getTextView().setText(bookmarksList.get(position));
+        holder.getTextView().setText(bookmarksList.get(position).getTitle());
         // url click listener
         holder.text1.setOnClickListener(new View.OnClickListener() {
             @Override

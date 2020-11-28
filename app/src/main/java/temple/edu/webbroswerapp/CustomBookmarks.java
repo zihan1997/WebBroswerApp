@@ -1,6 +1,8 @@
 package temple.edu.webbroswerapp;
 
-public class CustomBookmarks {
+import java.io.Serializable;
+
+public class CustomBookmarks implements Serializable {
     private String title;
     private String url;
 

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -21,7 +22,7 @@ import java.util.ArrayList;
  * Use the {@link PagerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PagerFragment extends Fragment {
+public class  PagerFragment extends Fragment implements Serializable{
 
     protected ArrayList<PageViewerFragment> fragments;
     protected FragmentPagerAdapter adapter;
@@ -37,10 +38,10 @@ public class PagerFragment extends Fragment {
     }
 
     public static PagerFragment newInstance() {
-        PagerFragment fragment = new PagerFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+//        PagerFragment fragment = new PagerFragment();
+//        Bundle args = new Bundle();
+//        fragment.setArguments(args);
+        return new PagerFragment();
     }
 
     @Override

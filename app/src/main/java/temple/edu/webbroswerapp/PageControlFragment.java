@@ -12,12 +12,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-public class PageControlFragment extends Fragment {
+import java.io.Serializable;
 
-    protected EditText userInput;
-    private ImageButton goButton;
-    private ImageButton backButton;
-    private ImageButton nextButton;
+public class PageControlFragment extends Fragment implements Serializable{
+
+    protected transient EditText userInput;
 
     ChooseInterface parentAct;
 
@@ -47,6 +46,11 @@ public class PageControlFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -56,9 +60,9 @@ public class PageControlFragment extends Fragment {
         userInput = l.findViewById(R.id.inputView);
 
         // Find IDs
-        goButton = l.findViewById(R.id.goButton);
-        backButton = l.findViewById(R.id.backButton);
-        nextButton = l.findViewById(R.id.nextButton);
+        ImageButton goButton = l.findViewById(R.id.goButton);
+        ImageButton backButton = l.findViewById(R.id.backButton);
+        ImageButton nextButton = l.findViewById(R.id.nextButton);
 
         // Set listeners
         goButton.setOnClickListener(new View.OnClickListener() {
