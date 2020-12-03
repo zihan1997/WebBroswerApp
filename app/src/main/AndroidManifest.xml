@@ -11,14 +11,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BookmarksActivity"></activity>
+        <activity android:name=".BookmarksActivity">
+
+        </activity>
+
         <activity android:name=".BrowserActivity">
 
-<!--        <activity android:name=".BrowserActivity"></activity>-->
-<!--        <activity android:name=".BookmarksActivity">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
 
+                <data android:scheme="https" android:host="www.temple.edu" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

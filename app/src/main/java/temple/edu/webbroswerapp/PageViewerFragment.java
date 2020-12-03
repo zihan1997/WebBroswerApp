@@ -83,7 +83,12 @@ public class PageViewerFragment extends Fragment implements Serializable{
         webView.setWebViewClient(new WebViewClient(){
 //            @Override
 //            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-//                view.loadUrl(request.getUrl().toString());
+////                view.loadUrl(request.getUrl().toString());
+//                Uri uri = request.getUrl();
+////                String uri_string = "URI: " + uri.toString();
+////                if(uri_string.startsWith("intent:")){
+//                    Log.d("uri", uri.toString());
+////                }
 //                return true;
 //            }
 
@@ -106,6 +111,17 @@ public class PageViewerFragment extends Fragment implements Serializable{
         if(savedInstanceState != null){
             webView.restoreState(savedInstanceState);
             webView.reload();
+        }
+
+        if(getActivity().getIntent() != null){
+            Uri uri = getActivity().getIntent().getData();
+            if (uri != null ) {
+                String uri_string = uri.toString();
+//                int www_index = uri_string.indexOf("www");
+//                uri_string = uri_string.substring(www_index);
+                Log.d("uri", uri_string);
+                this.loadWeb(uri_string);
+            }
         }
 
         return l;

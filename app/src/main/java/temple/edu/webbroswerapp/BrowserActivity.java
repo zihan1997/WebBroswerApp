@@ -1,5 +1,6 @@
 package temple.edu.webbroswerapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -8,8 +9,11 @@ import androidx.fragment.app.FragmentManager;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -92,13 +96,13 @@ public class BrowserActivity extends AppCompatActivity
         }
 
 //        if(getIntent() != null){
-//
-//            String title = getIntent().getStringExtra(title_KEY);
-//            String url = getIntent().getStringExtra(url_KEY);
-//            Log.d("getIntent", title+" "+url);
-//            pagerFragment.addPage();
-//            pagerFragment.vPager.setCurrentItem(0);
-//            pagerFragment.fragments.get(0).loadWeb(url);
+//            Uri uri = getIntent().getData();
+//            if (uri != null && pagerFragment.vPager != null) {
+//                String uri_string = "URI: " + uri.toString();
+//                Log.d("uri", uri_string);
+//                int index = pagerFragment.vPager.getCurrentItem();
+//                pagerFragment.fragments.get(index).loadWeb(uri_string);
+//            }
 //        }
 
     }
@@ -223,5 +227,54 @@ public class BrowserActivity extends AppCompatActivity
     @Override
     public void selectPage(int i) {
         pagerFragment.vPager.setCurrentItem(i, true);
+    }
+
+
+
+    /*
+     * Option Menu
+     * */
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_share) {
+            // get current page
+            int position = -1;
+            position = pagerFragment.vPager.getCurrentItem();
+
+            String title = getPagerFragment().get(position).getTitle();
+            String url = getPagerFragment().get(position).getCurrentURL();
+
+
+            // send implicit intent
+            if( title != null && url != null) {
+                // Create the text message with a string
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+
+                String textMessage = title + " " + url;
+                sendIntent.putExtra(Intent.EXTRA_TEXT, textMessage);
+                sendIntent.setType("text/plain");
+                // Verify that the intent will resolve to an activity
+                if (sendIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(sendIntent);
+                }
+            }else {
+                Toast.makeText(this, "open an url first before sharing", Toast.LENGTH_LONG).show();
+            }
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
